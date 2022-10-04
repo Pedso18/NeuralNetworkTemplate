@@ -1,6 +1,6 @@
-import java.util.Arrays;
+import java.io.Serializable;
 
-public class Network {
+public class Network implements Serializable {
 
     private double[][] output; // [currentLayer][currentNeuron]
     private double[][][] weights; // [currentLayer][currentNeuron][prevNeuron]
