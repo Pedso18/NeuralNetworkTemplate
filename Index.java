@@ -10,57 +10,67 @@ import java.util.Random;
 public class Index {
 
     private static int[] networkLayerSizes = { 2, 4, 2 };
-    static double[][] inputs;
-    static double[][] targets;
 
     public static void main(String[] args) {
         Network net = new Network(networkLayerSizes);
 
         int amountOfInputs = 100;
-        generateInputs(amountOfInputs);
+        DataPoint[] inputs = generateInputs(amountOfInputs);
 
-        for (int w = 0; w < 10; w++) {
-
+        for (int w = 0; w < 50; w++) {
             for (int a = 0; a < amountOfInputs; a++) {
                 for (int i = 0; i < 1000; i++) {
-                    net.train(inputs[a], targets[a], 0.3);
+                    net.train(inputs[a].input, inputs[a].target, 0.3);
                 }
             }
         }
 
-        double[] o = net.calculate(inputs[50]);
+        generateInputs(amountOfInputs);
 
-        o[0] = round(o[0], 3);
-        o[1] = round(o[1], 3);
+        for (int i = 0; i < amountOfInputs; i++) {
 
-        System.out.println("Expected: " + Arrays.toString(targets[50]));
-        System.out.println("Resulted: " + Arrays.toString(o));
-        System.out.println("----------------------");
+            double[] o = net.calculate(inputs[i].input);
+
+            o[0] = round(o[0], 3);
+            o[1] = round(o[1], 3);
+
+            System.out.println("Expected: " + Arrays.toString(inputs[i].target));
+            System.out.println("Resulted: " + Arrays.toString(o));
+            System.out.println("----------------------");
+
+        }
 
         saveNetwork(net);
 
     }
 
-    public static void generateInputs(int howMany) {
+    public static DataPoint[] generateInputs(int howMany) {
 
         Random rand = new Random();
 
-        inputs = new double[howMany][2];
-        targets = new double[howMany][2];
+        DataPoint[] newInputs = new DataPoint[howMany];
 
         for (int i = 0; i < howMany; i++) {
-            inputs[i][0] = rand.nextDouble();
-            inputs[i][1] = rand.nextDouble();
 
-            if (inputs[i][0] + inputs[i][1] >= 1) {
-                targets[i][0] = 0;
-                targets[i][1] = 1;
+            double[] currInput = new double[2];
+            double[] currTarget = new double[2];
+
+            currInput[0] = rand.nextDouble();
+            currInput[1] = rand.nextDouble();
+
+            if (currInput[0] + currInput[1] >= 1) {
+                currTarget[0] = 0;
+                currTarget[1] = 1;
             } else {
-                targets[i][0] = 1;
-                targets[i][1] = 0;
+                currTarget[0] = 1;
+                currTarget[1] = 0;
             }
 
+            newInputs[i] = new DataPoint(currInput, currTarget);
+
         }
+
+        return newInputs;
 
     }
 
