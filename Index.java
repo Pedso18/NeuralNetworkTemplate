@@ -15,12 +15,12 @@ public class Index {
         Network net = new Network(networkLayerSizes);
 
         int amountOfInputs = 100;
-        DataPoint[] inputs = generateInputs(amountOfInputs);
+        DataPoint[] dataPoints = generateInputs(amountOfInputs);
 
         for (int w = 0; w < 50; w++) {
             for (int a = 0; a < amountOfInputs; a++) {
                 for (int i = 0; i < 1000; i++) {
-                    net.train(inputs[a].input, inputs[a].target, 0.3);
+                    net.train(dataPoints[a].input, dataPoints[a].target, 0.3);
                 }
             }
         }
@@ -29,12 +29,12 @@ public class Index {
 
         for (int i = 0; i < amountOfInputs; i++) {
 
-            double[] o = net.calculate(inputs[i].input);
+            double[] o = net.calculate(dataPoints[i].input);
 
             o[0] = round(o[0], 3);
             o[1] = round(o[1], 3);
 
-            System.out.println("Expected: " + Arrays.toString(inputs[i].target));
+            System.out.println("Expected: " + Arrays.toString(dataPoints[i].target));
             System.out.println("Resulted: " + Arrays.toString(o));
             System.out.println("----------------------");
 
